@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./styles.css">
+    <title>CabinMaster</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="col justify-content-center">
+        <div class="desktop">
+          <h1 class="m-2">Hello World!</h1>
+        </div>
+
+
+        <form action="#!" id="main">
+          <h2>Login to CabinMaster</h2>
+
+          <div class="input-parent">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="john.doe@email.com">
+          </div>
+
+          <div class="input-parent">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="*******">
+          </div>
+
+          <button type="submit">Login</button>
+        </form>
+      </div>
+
+    </div>
+
+
+    <!-- You can also require other files to run in this process -->
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js/"></script>
+    <script src="./renderer.js"></script>
+  </body>
+
+</html>
