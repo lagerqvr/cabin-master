@@ -4,12 +4,8 @@
  */
 const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld('exposed', {
+contextBridge.exposeInMainWorld('electron', {
 
-  // expose a function in main (node) to renderer
-  getStuffFromMain: () => ipcRenderer.invoke('get-stuff-from-main'),
-
-  // send data back to main
-  sendStuffToMain: (data) => ipcRenderer.invoke('send-stuff-to-main', data)
+  signIn: (data) => ipcRenderer.invoke('signIn', data),
 
 })

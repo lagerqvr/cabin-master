@@ -90,10 +90,23 @@ body {
     background: #1c1b1b;
 }
 
-.dashboard {
-    visibility: visible;
+#dashboard {
+    display: none;
     color: #e7e7e7;
     animation: popup 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.check {
+    color: #198754;
+    margin-left: 3px;
+}
+
+input[type="checkbox"] {
+  /* For iOS < 15 to remove gradient background */
+  margin-top: 3px !important;
+  background-color:#323131;
+  /* Not removed via appearance */
+  margin: 0;
 }
 
 table, th, td {
@@ -108,7 +121,7 @@ table {
 
 tr:last-child {
     border:0
-  }
+}
 
 tr:hover {
     background-color: grey;
@@ -125,12 +138,12 @@ tr:hover {
 }
 
 #mod-btn {
-    width: 49.5% !important;
+    width: auto !important;
     margin-right: 5px;
 }
 
 #del-btn {
-    width: 49.5% !important;
+    width: auto !important;
 }
 
 .big-heading {
@@ -184,29 +197,6 @@ label, ::placeholder, p {
 
 .dash-div {
     border: 1px solid #302d2d
-
-}
-
-.cartDyn {
-    border-radius: 5px;
-    max-height: 450px;
-    overflow-y: auto;
-    box-shadow: 0 0 50px #ccc;
-}
-
-.log-div {
-    width: -webkit-fill-available; 
-}
-
-#log > tr > th {
-    color: green;
-    font-size: 14px;
-    font-weight: 400;
-}
-
-#checkOut {
-    background-color: #5e35b1;
-    color: white;
 }
 
 #logout {
@@ -237,9 +227,19 @@ label, ::placeholder, p {
     }
 }
 
+@media (max-width: 850px) {
+    .flex-div {
+        display: inline-block;
+        width: 98%;
+    }
+}
+
 @media (max-width: 1157px) {
     #indexDiv {
         margin-top: 0.5rem;
+    }
+    .big-heading {
+        font-size: 3rem;
     }
 }
 

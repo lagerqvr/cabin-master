@@ -1,12 +1,19 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
+const fetch = require('electron-fetch').default
+
+// "localStorage" for electron
+// https://www.npmjs.com/package/electron-store
+const Store = require('electron-store')
+const store = new Store()
+
+const API_URL = "https://wom22-project-2-1.azurewebsites.net"
 
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    fullscreen: true,
     icon: __dirname + './public/logo-v1.png',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -25,10 +32,32 @@ function createWindow() {
 // Called when Electron is ready to create browser windows.
 app.whenReady().then(() => {
 
-
   createWindow()
 
   // Check original template for MacOS stuff!
+})
+
+ipcMain.handle('signIn', async (event, data) => {
+  console.log('Login (main)')
+  try {
+    const resp = await fetch(API_URL + '/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      timeout: 3000
+    })
+    const user = await resp.json()
+    console.log(user)
+
+    if (resp.status > 201) return user
+
+    store.set('jwt', user.token)
+    return false // false = login succeeded
+
+  } catch (error) {
+    console.log(error.message)
+    return { 'msg': "Login failed." }
+  }
 })
 
 // Example functions for communication between main and renderer (backend/frontend)
