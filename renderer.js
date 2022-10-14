@@ -6,8 +6,18 @@
  * to expose Node.js functionality from the main process.
  */
 
-(async() => {
+(async () => {
     console.log(await window.exposed.getStuffFromMain())
-    
+
     await window.exposed.sendStuffToMain('Stuff from renderer')
 })()
+
+const signOut = () => {
+    document.querySelector('#main').style.visibility = "visible"
+    document.querySelector('#dashboard').style.visibility = "hidden"
+}
+
+async function signIn() {
+    document.querySelector('#main').style.visibility = "hidden"
+    document.querySelector('#dashboard').style.visibility = "visible"
+}
