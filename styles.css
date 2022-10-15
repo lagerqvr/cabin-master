@@ -15,6 +15,7 @@
     visibility: visible;
     width: max-content;
     margin: 40px auto;
+    margin-top: 100px;
     font-family: "Segoe UI", sans-serif;
     padding: 25px 28px;
     background: #151414;
@@ -230,7 +231,7 @@ label, ::placeholder, p {
 @media (max-width: 850px) {
     .flex-div {
         display: inline-block;
-        width: 98%;
+        width: 99%;
     }
 }
 

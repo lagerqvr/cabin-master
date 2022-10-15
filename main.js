@@ -13,9 +13,11 @@ const API_URL = "https://wom22-project-2-1.azurewebsites.net"
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    fullscreen: true,
+    width: 1469,
+    height: 1283,
     icon: __dirname + './public/logo-v1.png',
     webPreferences: {
+      nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js')
     },
     autoHideMenuBar: false // true to hide, press Alt to show when hidden
@@ -63,7 +65,6 @@ ipcMain.handle('signIn', async (event, data) => {
 // Example functions for communication between main and renderer (backend/frontend)
 ipcMain.handle('get-stuff-from-main', () => 'Stuff from main!')
 ipcMain.handle('send-stuff-to-main', async (event, data) => console.log(data))
-
 
 app.on('window-all-closed', function () {
   app.quit()
