@@ -31,14 +31,16 @@
               </div>
 
               <div>
-                <table class="table table-hover">
+                <table class="table">
                   <thead>
                     <tr>
                       <th scope="col">Cabins</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="cabins" onclick="highlightRow()">
                     <tr>
+                    </tr>
+                    <!-- <tr>
                       <td>Cabin 1 - Havsvägen 7, Ingå (Sauna, Beach)</td>
                     </tr>
                     <tr>
@@ -46,7 +48,7 @@
                     </tr>
                     <tr>
                       <td>Cabin 3 - Trollhättan 13B, Ekenäs (Beach, Sauna)</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -62,8 +64,8 @@
                         <th scope="col">Service</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
+                    <tbody id="services">
+                      <!-- <tr>
                         <td>Lawn mowing (18€)</td>
                       </tr>
                       <tr>
@@ -71,16 +73,19 @@
                       </tr>
                       <tr>
                         <td>Extermination (17€)</td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table>
                 </div>
                 <h5 class="mt-5">Date</h5>
-                <div class="">
+                <div>
                   <input type="date" id="birthday" name="birthday">
-                  <button id="resBtn" class="btn btn-success mb-2 mt-2">
+                  <button id="resBtn" class="btn btn-success mb-2 mt-2" onclick="createReservation()">
                     Reserve</button>
+                  <p id="resmsg">
+                  </p>
                 </div>
+
               </div>
 
               <div id="reserveInfo">
@@ -106,8 +111,9 @@
                       <th scope="col">Location</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
+                  <tbody id="orders">
+                    <!--
+                     <tr>
                       <td>2022-10-20</td>
                       <td>Cleaning</td>
                       <td>Havsvägen 7</td>
@@ -121,7 +127,9 @@
                       <td>2022-11-12</td>
                       <td>Cleaning</td>
                       <td>Trollhättan 13B</td>
-                    </tr>
+                    </tr> 
+                    -->
+
                   </tbody>
                 </table>
               </div>

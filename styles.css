@@ -125,9 +125,10 @@ tr:last-child {
 }
 
 tr:hover {
-    background-color: grey;
-    color: #151414;
-}
+    /* background-color: grey;
+    color: #151414; */
+    cursor: pointer;
+} 
 
 #birthday {
     background-color: #323131;
