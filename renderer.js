@@ -5,8 +5,13 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
-
 //
+
+if (localStorage.getItem('selectedDate') == '') {
+    document.querySelector("#birthday").valueAsDate = new Date();
+} else {
+    document.querySelector("#birthday").value = localStorage.getItem('selectedDate')
+}
 
 const API_URL = "https://wom22-project-2-2.azurewebsites.net"
 
@@ -75,7 +80,7 @@ async function getCabins() {
 
         for (var i = 0; i < cabins.length; i++) {
             cabinCount += 1;
-            var row = `<tr><td>Cabin ${cabinCount} - ${cabins[i].address}</td></tr>`
+            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" onclick="selectRow()">Cabin ${cabinCount} - ${cabins[i].address}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -99,7 +104,7 @@ async function getServices() {
         table.innerHTML = "";
 
         for (var i = 0; i < services.length; i++) {
-            var row = `<tr><td>${services[i].servicetype}</td></tr>`
+            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" onclick="selectRow()">${services[i].servicetype}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -125,7 +130,7 @@ async function getReservations() {
         for (var i = 0; i < orders.length; i++) {
             let date = orders[i].date;
             let formattedDate = date.substring(0, 10);
-            var row = `<tr><td>${formattedDate}</td><td>${orders[i].servicetype}</td><td>${orders[i].cabin}</td></tr>`
+            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" onclick="selectRow()">${formattedDate}</td><td>${orders[i].servicetype}</td><td>${orders[i].cabin}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -134,34 +139,81 @@ async function getReservations() {
 }
 getReservations();
 
-// Make row selectable
-function highlightRow() {
-
+// Make row selectable & get table values
+const selectRow = () => {
+    console.log("Here")
 }
 
 // Get table values
-
+const getTableValues = () => {
+    localStorage.setItem('cabinValue', '')
+    localStorage.setItem('serviceValue', '')
+}
 
 // Create a new reservation
 async function createReservation() {
     try {
-        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation created</b></p>`
-        /* data = {
-            email: document.querySelector('#email').value,
-            password: document.querySelector('#password').value
+        data = {
+            "date": document.querySelector("#birthday").value,
+            "cabin": "Rasmus cabin",
+            "servicetype": "Cleaning"
         }
-        const API_URL = "https://wom22-project-2-1.azurewebsites.net"
-        const resp = await fetch(API_URL + '/users/login', {
+        const resp = await fetch(API_URL + '/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
             timeout: 3000
         })
-        const user = await resp.json() */
+        const res = await resp.json()
+        console.log(res);
+        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation created</b></p>`
         getReservations();
     } catch (error) {
         console.log(error.message);
         document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Couldn't create reservation</b></p>`
+    }
+}
+
+// Delete a reservation
+async function deleteReservation() {
+    try {
+        const tempReservationId = 1;
+        const resp = await fetch(API_URL + '/orders/' + tempReservationId, {
+            method: 'DELETE',
+            timeout: 3000
+        })
+        const res = await resp.json()
+        console.log(res);
+        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation deleted successfully</b></p>`
+        getReservations();
+    } catch (error) {
+        console.log(error.message);
+        document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Couldn't delete reservation</b></p>`
+    }
+}
+
+// Modify a reservation
+async function modifyReservation() {
+    try {
+        data = {
+            "date": document.querySelector("#birthday").value,
+            "cabin": "Rasmus cabin",
+            "servicetype": "Lawn mowing"
+        }
+        const tempReservationId = 2;
+        const resp = await fetch(API_URL + '/orders/' + tempReservationId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+            timeout: 3000
+        })
+        const res = await resp.json()
+        console.log(res);
+        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation updated successfully</b></p>`
+        getReservations();
+    } catch (error) {
+        console.log(error.message);
+        document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Couldn't change reservation</b></p>`
     }
 }
 
@@ -181,6 +233,14 @@ document.querySelector('#signIn').addEventListener('click', async () => {
     document.querySelector('#currentUser').innerHTML = `<p class="mt-3 ml-3">Signed is as <b>${document.querySelector('#email').value}<b class="check">✓</b></b></p>`
 })
 
+// Set datepicker value
+const setDate = () => {
+    let datePicker = document.querySelector("#birthday").value;
+    console.log(datePicker);
+    localStorage.setItem('selectedDate', datePicker);
+}
+
+// Function for signing out
 document.querySelector('#signOut').addEventListener('click', async () => {
     localStorage.setItem('userKey', '');
     localStorage.setItem('currentUser', '');
