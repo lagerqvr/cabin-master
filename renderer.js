@@ -254,8 +254,6 @@ async function deleteReservation() {
 async function modifyReservation() {
     try {
         let resId = localStorage.getItem('selectedRes');
-        console.log(document.querySelector(`#resDate${resId}`).innerText);
-
         data = {
             "date": document.querySelector(`#resDate${resId}`).innerText,
             "cabin": document.querySelector(`#resCabin${resId}`).innerText,
@@ -297,9 +295,13 @@ document.querySelector('#signIn').addEventListener('click', async () => {
 
 // Set datepicker value
 const setDate = () => {
-    let datePicker = document.querySelector("#birthday").value;
-    console.log(datePicker);
-    localStorage.setItem('selectedDate', datePicker);
+    try {
+        let datePicker = document.querySelector("#birthday").value;
+        console.log(datePicker);
+        localStorage.setItem('selectedDate', datePicker);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 // Function for signing out
