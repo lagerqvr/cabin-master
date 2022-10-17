@@ -223,9 +223,17 @@ label, ::placeholder, p {
     font-size: 12px;
 }
 
-/* #res-table[contenteditable="true"] {
-    background-color: rgba(217, 245, 255,0.5);
-  } */ 
+  [contenteditable="true"]:active,
+  [contenteditable="true"]:focus {
+    background-color: grey;
+    color: #151414; 
+    border:none !important;
+    outline:none !important;
+  }
+
+.res-input {
+    margin-right: 10px !important;
+}
 
 @media (max-width: 1250px) {
     #authStatus {

@@ -85,7 +85,7 @@ async function getCabins() {
         for (var i = 0; i < cabins.length; i++) {
             cabinCount += 1;
             checkNum += 1;
-            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" id="checkC${checkNum}" onclick="selectCabin(this, this.id)">Cabin ${cabinCount} - ${cabins[i].address}</td></tr>`
+            var row = `<tr><td><input class="form-check-input res-input" type="checkbox" id="checkC${checkNum}" onclick="selectCabin(this, this.id)">Cabin ${cabinCount} - ${cabins[i].address}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -110,7 +110,7 @@ async function getServices() {
 
         for (var i = 0; i < services.length; i++) {
             checkNum += 1;
-            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" id="checkS${checkNum}" onclick="selectService(this, this.id)">${services[i].servicetype}</td></tr>`
+            var row = `<tr><td><input class="form-check-input res-input" type="checkbox" id="checkS${checkNum}" onclick="selectService(this, this.id)">${services[i].servicetype}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -137,7 +137,7 @@ async function getReservations() {
             let date = orders[i].date;
             let formattedDate = date.substring(0, 10);
             checkNum += 1;
-            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" id="checkR${checkNum}"
+            var row = `<tr><td><input class="form-check-input res-input" type="checkbox" id="checkR${checkNum}"
             onclick="selectRes(this, this.id)">${orders[i].id}</td>
             <td contenteditable="true" id="resDate${orders[i].id}">${formattedDate}</td>
             <td contenteditable="true" id="resType${orders[i].id}">${orders[i].servicetype}</td>
