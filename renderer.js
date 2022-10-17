@@ -7,12 +7,14 @@
  */
 //
 
+// Logic for datepicker
 if (localStorage.getItem('selectedDate') == '') {
     document.querySelector("#birthday").valueAsDate = new Date();
 } else {
     document.querySelector("#birthday").value = localStorage.getItem('selectedDate')
 }
 
+// API URL for API 2
 const API_URL = "https://wom22-project-2-2.azurewebsites.net"
 
 // Show/hide password toggle
@@ -29,6 +31,7 @@ const showPsd = () => {
     }
 }
 
+// Get token from API 1
 async function getToken() {
     try {
         data = {
@@ -49,6 +52,7 @@ async function getToken() {
     }
 }
 
+// Check if user has JWT
 const checkAuth = () => {
     let userKey = localStorage.getItem('userKey');
     /* console.log(userKey) */
