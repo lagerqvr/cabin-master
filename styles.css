@@ -223,13 +223,17 @@ label, ::placeholder, p {
     font-size: 12px;
 }
 
+/* #res-table[contenteditable="true"] {
+    background-color: rgba(217, 245, 255,0.5);
+  } */ 
+
 @media (max-width: 1250px) {
     #authStatus {
         margin-left: 17px;
     }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 1200px) {
     .flex-div {
         display: inline-block;
         width: 99%;

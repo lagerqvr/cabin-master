@@ -51,7 +51,7 @@ async function getToken() {
 
 const checkAuth = () => {
     let userKey = localStorage.getItem('userKey');
-    console.log(userKey)
+    /* console.log(userKey) */
     if (userKey == null || userKey == '' || userKey == undefined) {
         document.querySelector('#dashboard').style.display = "none";
         document.querySelector('#main').style.visibility = "visible";
@@ -71,16 +71,17 @@ async function getCabins() {
             timeout: 3000
         })
         const cabins = await resp.json()
-        console.log(cabins);
 
         const table = document.querySelector('#cabins');
 
         table.innerHTML = "";
         let cabinCount = 0;
+        let checkNum = 0;
 
         for (var i = 0; i < cabins.length; i++) {
             cabinCount += 1;
-            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" onclick="selectRow()">Cabin ${cabinCount} - ${cabins[i].address}</td></tr>`
+            checkNum += 1;
+            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" id="checkC${checkNum}" onclick="selectCabin(this, this.id)">Cabin ${cabinCount} - ${cabins[i].address}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -97,14 +98,15 @@ async function getServices() {
             timeout: 3000
         })
         const services = await resp.json()
-        console.log(services);
 
         const table = document.querySelector('#services');
 
         table.innerHTML = "";
+        let checkNum = 0;
 
         for (var i = 0; i < services.length; i++) {
-            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" onclick="selectRow()">${services[i].servicetype}</td></tr>`
+            checkNum += 1;
+            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" id="checkS${checkNum}" onclick="selectService(this, this.id)">${services[i].servicetype}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -121,16 +123,21 @@ async function getReservations() {
             timeout: 3000
         })
         const orders = await resp.json()
-        console.log(orders);
 
         const table = document.querySelector('#orders');
 
         table.innerHTML = "";
+        let checkNum = 0;
 
         for (var i = 0; i < orders.length; i++) {
             let date = orders[i].date;
             let formattedDate = date.substring(0, 10);
-            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" onclick="selectRow()">${formattedDate}</td><td>${orders[i].servicetype}</td><td>${orders[i].cabin}</td></tr>`
+            checkNum += 1;
+            var row = `<tr><td><input class="form-check-input m-2" type="checkbox" id="checkR${checkNum}"
+            onclick="selectRes(this, this.id)">${orders[i].id}</td>
+            <td contenteditable="true" id="resDate${orders[i].id}">${formattedDate}</td>
+            <td contenteditable="true" id="resType${orders[i].id}">${orders[i].servicetype}</td>
+            <td contenteditable="true" id="resCabin${orders[i].id}">${orders[i].cabin}</td></tr>`
             table.innerHTML += row;
         }
     } catch (error) {
@@ -139,24 +146,71 @@ async function getReservations() {
 }
 getReservations();
 
-// Make row selectable & get table values
-const selectRow = () => {
-    console.log("Here")
+// Select cabin & get value
+const selectCabin = (e, id) => {
+    try {
+        for (var i = 1; i <= 3; i++) {
+            if ("checkC" + i === id && document.getElementById("checkC" + i).checked === true) {
+                document.getElementById("checkC" + i).checked = true;
+            } else {
+                document.getElementById("checkC" + i).checked = false;
+            }
+        }
+        let cabin = e.parentElement.innerText;
+        let formattedCabin = cabin.substring(10);
+
+        localStorage.setItem('selectedCabin', formattedCabin);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
-// Get table values
-const getTableValues = () => {
-    localStorage.setItem('cabinValue', '')
-    localStorage.setItem('serviceValue', '')
+// Select cabin & get value
+const selectService = (e, id) => {
+    try {
+        for (var i = 1; i <= 3; i++) {
+            if ("checkS" + i === id && document.getElementById("checkS" + i).checked === true) {
+                document.getElementById("checkS" + i).checked = true;
+            } else {
+                document.getElementById("checkS" + i).checked = false;
+            }
+        }
+        let service = e.parentElement.innerText;
+
+        localStorage.setItem('selectedService', service);
+    } catch (error) {
+
+    }
 }
+
+// Select reservation & get value
+const selectRes = (e, id) => {
+    try {
+        let tableLength = document.getElementById("res-table").rows.length - 1;
+        for (var i = 1; i <= tableLength; i++) {
+            if ("checkR" + i === id && document.getElementById("checkR" + i).checked === true) {
+                document.getElementById("checkR" + i).checked = true;
+            } else {
+                document.getElementById("checkR" + i).checked = false;
+            }
+        }
+        let res = e.parentElement.innerText;
+        console.log(res)
+
+        localStorage.setItem('selectedRes', res);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 // Create a new reservation
 async function createReservation() {
     try {
         data = {
             "date": document.querySelector("#birthday").value,
-            "cabin": "Rasmus cabin",
-            "servicetype": "Cleaning"
+            "cabin": localStorage.getItem('selectedCabin'),
+            "servicetype": localStorage.getItem('selectedService')
         }
         const resp = await fetch(API_URL + '/orders', {
             method: 'POST',
@@ -177,8 +231,8 @@ async function createReservation() {
 // Delete a reservation
 async function deleteReservation() {
     try {
-        const tempReservationId = 1;
-        const resp = await fetch(API_URL + '/orders/' + tempReservationId, {
+        let resId = localStorage.getItem('selectedRes');
+        const resp = await fetch(API_URL + '/orders/' + resId, {
             method: 'DELETE',
             timeout: 3000
         })
@@ -195,13 +249,16 @@ async function deleteReservation() {
 // Modify a reservation
 async function modifyReservation() {
     try {
+        let resId = localStorage.getItem('selectedRes');
+        console.log(document.querySelector(`#resDate${resId}`).innerText);
+
         data = {
-            "date": document.querySelector("#birthday").value,
-            "cabin": "Rasmus cabin",
-            "servicetype": "Lawn mowing"
+            "date": document.querySelector(`#resDate${resId}`).innerText,
+            "cabin": document.querySelector(`#resCabin${resId}`).innerText,
+            "servicetype": document.querySelector(`#resType${resId}`).innerText
         }
-        const tempReservationId = 2;
-        const resp = await fetch(API_URL + '/orders/' + tempReservationId, {
+
+        const resp = await fetch(API_URL + '/orders/' + resId, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -209,7 +266,7 @@ async function modifyReservation() {
         })
         const res = await resp.json()
         console.log(res);
-        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation updated successfully</b></p>`
+        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation ${resId} updated successfully</b></p>`
         getReservations();
     } catch (error) {
         console.log(error.message);
@@ -217,6 +274,7 @@ async function modifyReservation() {
     }
 }
 
+// Function for signing in
 document.querySelector('#signIn').addEventListener('click', async () => {
     getToken();
     localStorage.setItem('currentUser', document.querySelector('#email').value);

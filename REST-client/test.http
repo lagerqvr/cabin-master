@@ -1,0 +1,16 @@
+@baseURL = https://wom22-project-2-2.azurewebsites.net
+
+### 
+
+POST {{baseURL}}/orders
+Content-Type: application/json
+
+{
+    "date": "2022-10-13",
+    "cabin": "Rasmus cabin",
+    "servicetype": "Cleaning"
+}
+
+###
+
+DELETE {{baseURL}}/orders/1
