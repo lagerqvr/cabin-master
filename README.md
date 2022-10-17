@@ -1,5 +1,5 @@
 # cabin-master
-CabinMaster is a frontend application created in React.js as a part of the course 'Webbtjänster och molnteknologi' at Arcada UAS. 
+CabinMaster is a frontend application created in Electron.js as a part of the course 'Webbtjänster och molnteknologi' at Arcada UAS. 
 
 # electron-quick-start
 
