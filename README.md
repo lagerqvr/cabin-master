@@ -1,6 +1,8 @@
 # cabin-master
 CabinMaster is a frontend application created in Electron.js as a part of the course 'Webbtjänster och molnteknologi' at Arcada UAS. 
 
+https://user-images.githubusercontent.com/5682399/196283751-d9d23ded-368a-431f-8196-9dfbeace57ea.png
+
 # electron-quick-start
 
 ## Modified by fw-teaching, original template here: https://github.com/electron/electron-quick-start
