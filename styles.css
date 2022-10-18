@@ -11,6 +11,7 @@
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
 }
+
 #main {
     visibility: visible;
     width: max-content;
@@ -94,22 +95,27 @@ input[type="checkbox"] {
 table, th, td {
     background-color: #323131;
     border-color: #606060 !important;
+    border-bottom-style: groove;
     color: #a4a4a4;
+} 
+
+table:last-child {
+    border: none;
 }
 
 table {
     border-radius: 5px;
 }
 
-tr:last-child {
-    border:0
-}
-
 tr:hover {
-    /* background-color: grey;
-    color: #151414; */
     cursor: pointer;
 } 
+
+/* tbody {
+    border-color: inherit !important;
+    border-style: outset !important;
+    border-width: 0 !important;
+} */
 
 #birthday {
     background-color: #323131;

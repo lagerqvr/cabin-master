@@ -254,22 +254,30 @@ async function deleteReservation() {
 async function modifyReservation() {
     try {
         let resId = localStorage.getItem('selectedRes');
-        data = {
-            "date": document.querySelector(`#resDate${resId}`).innerText,
-            "cabin": document.querySelector(`#resCabin${resId}`).innerText,
-            "servicetype": document.querySelector(`#resType${resId}`).innerText
-        }
+        let editS = false;
+        let tableLength = document.getElementById("res-table").rows.length - 1;
+        for (var i = 1; i <= tableLength; i++) {
+            if (document.getElementById("checkR" + i).checked === false && editS == false) {
+                document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Please select a reservation</b></p>`
+            } else {
+                document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation (ID-${resId}) updated successfully</b></p>`
+                data = {
+                    "date": document.querySelector(`#resDate${resId}`).innerText,
+                    "cabin": document.querySelector(`#resCabin${resId}`).innerText,
+                    "servicetype": document.querySelector(`#resType${resId}`).innerText
+                }
 
-        const resp = await fetch(API_URL + '/orders/' + resId, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-            timeout: 3000
-        })
-        const res = await resp.json()
-        console.log(res);
-        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation ${resId} updated successfully</b></p>`
-        getReservations();
+                const resp = await fetch(API_URL + '/orders/' + resId, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    timeout: 3000
+                })
+                const res = await resp.json();
+                getReservations();
+                editS = true;
+            }
+        }
     } catch (error) {
         console.log(error.message);
         document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Couldn't change reservation</b></p>`
