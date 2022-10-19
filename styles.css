@@ -12,8 +12,12 @@
     box-sizing: border-box;
 }
 
+body {
+    min-height: 100vh;
+    overflow: hidden;
+}
+
 #main {
-    visibility: visible;
     width: max-content;
     margin: 40px auto;
     margin-top: 100px;
@@ -91,6 +95,28 @@ input[type="checkbox"] {
   /* Not removed via appearance */
   margin: 0;
 }
+
+
+/* OVERRIDE FOR BOOTSTRSP STYLING */
+
+.res-input:focus {
+    border-color: #198754 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+  }
+  
+  .res-input:checked {
+    border-color: #198754 !important;
+    background-color: #198754 !important;
+  }
+  
+  .res-input:focus:not(:checked) {
+    border-color: #1ea264 !important;
+  }
+  
+  .res-input:not(:disabled):active {
+    background-color: #d6f5dd !important;
+    border-color: #d6f5dd !important;
+  }
 
 table, th, td {
     background-color: #323131;

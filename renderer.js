@@ -164,6 +164,7 @@ const selectCabin = (e, id) => {
         let formattedCabin = cabin.substring(10);
 
         localStorage.setItem('selectedCabin', formattedCabin);
+        localStorage.setItem('selectedCabinId', id);
     } catch (error) {
         console.log(error.message);
     }
@@ -182,6 +183,7 @@ const selectService = (e, id) => {
         let service = e.parentElement.innerText;
 
         localStorage.setItem('selectedService', service);
+        localStorage.setItem('selectedServiceId', id);
     } catch (error) {
 
     }
@@ -211,21 +213,33 @@ const selectRes = (e, id) => {
 // Create a new reservation
 async function createReservation() {
     try {
-        data = {
-            "date": document.querySelector("#birthday").value,
-            "cabin": localStorage.getItem('selectedCabin'),
-            "servicetype": localStorage.getItem('selectedService')
+        let cabinVal = localStorage.getItem('selectedCabin');
+        let serviceVal = localStorage.getItem('selectedService');
+        if (cabinVal == '' || serviceVal == '') {
+            document.querySelector('#resmsg').innerHTML = `<p class="text-warning mt-2 mb-0"><b>Please select an option</b></p>`
+            return;
+        } else {
+            data = {
+                "date": document.querySelector("#birthday").value,
+                "cabin": localStorage.getItem('selectedCabin'),
+                "servicetype": localStorage.getItem('selectedService')
+            }
+            const resp = await fetch(API_URL + '/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                timeout: 3000
+            })
+            const res = await resp.json()
+            console.log(res);
+            document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation created</b></p>`;
+            localStorage.setItem('selectedService', '');
+            localStorage.setItem('selectedCabin', '');
+            document.getElementById(localStorage.getItem('selectedCabinId')).checked = false;
+            document.getElementById(localStorage.getItem('selectedServiceId')).checked = false;
+            getReservations();
         }
-        const resp = await fetch(API_URL + '/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-            timeout: 3000
-        })
-        const res = await resp.json()
-        console.log(res);
-        document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation created</b></p>`
-        getReservations();
+
     } catch (error) {
         console.log(error.message);
         document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Couldn't create reservation</b></p>`
@@ -258,7 +272,7 @@ async function modifyReservation() {
         let tableLength = document.getElementById("res-table").rows.length - 1;
         for (var i = 1; i <= tableLength; i++) {
             if (document.getElementById("checkR" + i).checked === false && editS == false) {
-                document.querySelector('#resmsg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>Please select a reservation</b></p>`
+                document.querySelector('#resmsg').innerHTML = `<p class="text-warning mt-2 mb-0"><b>Please select a reservation</b></p>`
             } else {
                 document.querySelector('#resmsg').innerHTML = `<p class="text-success mt-2 mb-0"><b>Reservation (ID-${resId}) updated successfully</b></p>`
                 data = {
@@ -274,6 +288,8 @@ async function modifyReservation() {
                     timeout: 3000
                 })
                 const res = await resp.json();
+                console.log(res);
+                localStorage.setItem('selectedRes', '');
                 getReservations();
                 editS = true;
             }
@@ -296,7 +312,7 @@ document.querySelector('#signIn').addEventListener('click', async () => {
         document.querySelector('#msg').innerHTML = `<p class="text-danger mt-2 mb-0"><b>${login_failed.msg}</b></p>`
         return
     }
-    document.querySelector('#main').style.visibility = "hidden";
+    document.querySelector('#main').style.display = "none";
     document.querySelector('#dashboard').style.display = "initial";
     document.querySelector('#currentUser').innerHTML = `<p class="mt-3 ml-3">Signed is as <b>${document.querySelector('#email').value}<b class="check">✓</b></b></p>`
 })
@@ -305,7 +321,6 @@ document.querySelector('#signIn').addEventListener('click', async () => {
 const setDate = () => {
     try {
         let datePicker = document.querySelector("#birthday").value;
-        console.log(datePicker);
         localStorage.setItem('selectedDate', datePicker);
     } catch (error) {
         console.log(error.message);
@@ -317,6 +332,7 @@ document.querySelector('#signOut').addEventListener('click', async () => {
     localStorage.setItem('userKey', '');
     localStorage.setItem('currentUser', '');
     document.querySelector('#dashboard').style.display = "none";
+    document.querySelector('#main').style.display = "";
     document.querySelector('#main').style.visibility = "visible";
     document.querySelector('#msg').innerHTML = '<p class="text-success mt-2 mb-0"><b>Signed out</b></p>'
 })
